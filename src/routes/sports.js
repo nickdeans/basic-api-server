@@ -2,15 +2,16 @@
 
 const express = require('express');
 const router = express.Router();
+const Sports = require('../models/sports.js');
+const sports = new Sports();
 
 const vaildator = require('../middleware/validator.js');
-const { app } = require('../server.js');
 
-app.get('/sports', getSports);
-app.get('/sports/:id', vaildator, getSportsById);
-app.post('/sports', createSports);
-app.put('/sports/:id', validator, updateSports);
-app.delete('/sports/:id', vaildator, removeSports);
+router.get('/sports', getSports);
+router.get('/sports/:id', vaildator, getSportsById);
+router.post('/sports', createSports);
+router.put('/sports/:id', vaildator, updateSports);
+router.delete('/sports/:id', vaildator, removeSports);
 
 function getSports(request, response, next){
     let resObject = sports.read();
@@ -37,7 +38,9 @@ function updateSports(request, response, next){
 }
 
 function removeSports(request, response, next){
-
+    const id = parseInt(req.params.id);
+    let database = sports.destroy(id);
+    response.json(database);
 }
 
 module.exports = router;
